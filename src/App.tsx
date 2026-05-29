@@ -306,7 +306,7 @@ function SlideView({ slideIndex, compactText }: { slideIndex: number; compactTex
       <div className="motion-waves" aria-hidden="true" />
       <header className="slide-header">
         <div className="school-identity">
-          <img src="/assets/school_emblem.svg" alt="영락의료과학고등학교 교표" />
+          <img src="/assets/school_emblem.jpg" alt="영락의료과학고등학교 교표" />
           <span>{slide.eyebrow}</span>
         </div>
       </header>
@@ -327,8 +327,9 @@ function AnimatedTitle({ slide, compactText }: { slide: Slide; compactText: bool
   const lines = slide.title.split("\n");
   const className = `animated-title title-${slide.id}`;
   const titleShellClass = `title-fx-shell title-mode-${slide.id}`;
+  const fixedLineBreakSlides = ["collection", "apm-encrypt", "apm-exception"];
 
-  if (compactText) {
+  if (compactText || fixedLineBreakSlides.includes(slide.id)) {
     return (
       <div className={titleShellClass} data-title={slide.title}>
         <h2 className={className}>{slide.title}</h2>
