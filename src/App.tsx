@@ -54,7 +54,10 @@ export function App() {
   const [index, setIndex] = useState(0);
   const [sound, setSound] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [compactText, setCompactText] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const lastTapRef = useRef(0);
   const current = slides[index];
   const progress = ((index + 1) / slides.length) * 100;
 
@@ -167,6 +170,14 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    const query = window.matchMedia("(max-width: 640px) and (orientation: portrait)");
+    const update = () => setCompactText(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
       if (key === "escape") return;
@@ -201,11 +212,53 @@ export function App() {
 
   const sectionLabel = useMemo(() => `${current.section} · ${String(index + 1).padStart(2, "0")}/${slides.length}`, [current.section, index]);
 
+  const onTouchStart = useCallback((event: React.TouchEvent<HTMLElement>) => {
+    const touch = event.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+  }, []);
+
+  const onTouchEnd = useCallback(
+    (event: React.TouchEvent<HTMLElement>) => {
+      const now = Date.now();
+      if (isFullscreen && now - lastTapRef.current < 320) {
+        event.preventDefault();
+        lastTapRef.current = 0;
+        void document.exitFullscreen().catch(() => undefined);
+        return;
+      }
+      lastTapRef.current = now;
+
+      const start = touchStartRef.current;
+      const touch = event.changedTouches[0];
+      touchStartRef.current = null;
+      if (!isFullscreen || !start || !touch) return;
+
+      const dx = touch.clientX - start.x;
+      const dy = touch.clientY - start.y;
+      const elapsed = now - start.time;
+      if (elapsed > 700 || Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+
+      event.preventDefault();
+      if (dx < 0) {
+        next();
+      } else {
+        previous();
+      }
+    },
+    [isFullscreen, next, previous],
+  );
+
   return (
     <main className={isFullscreen ? "app fullscreen" : "app"}>
-      <section className="stage" onClick={() => (isFullscreen ? next() : undefined)} aria-live="polite">
+      <section
+        className="stage"
+        onClick={() => (isFullscreen ? next() : undefined)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        aria-live="polite"
+      >
         <div className="progress" style={{ width: `${progress}%` }} />
-        <SlideView key={current.id} slideIndex={index} />
+        <SlideView key={current.id} slideIndex={index} compactText={compactText} />
         <div className="slide-footer">
           <span>{sectionLabel}</span>
           <span>{current.eyebrow}</span>
@@ -243,7 +296,7 @@ export function App() {
   );
 }
 
-function SlideView({ slideIndex }: { slideIndex: number }) {
+function SlideView({ slideIndex, compactText }: { slideIndex: number; compactText: boolean }) {
   const slide = slides[slideIndex];
 
   return (
@@ -259,7 +312,7 @@ function SlideView({ slideIndex }: { slideIndex: number }) {
       </header>
       <div className="slide-body">
         <div className="copy">
-          <AnimatedTitle slide={slide} />
+          <AnimatedTitle slide={slide} compactText={compactText} />
           {slide.subtitle ? <p className="subtitle">{slide.subtitle}</p> : null}
           {slide.bullets ? <BulletBlock bullets={slide.bullets} kind={slide.kind} fx={slide.textFx ?? "surge"} /> : null}
           {slide.tags ? <TagRow tags={slide.tags} /> : null}
@@ -270,10 +323,18 @@ function SlideView({ slideIndex }: { slideIndex: number }) {
   );
 }
 
-function AnimatedTitle({ slide }: { slide: Slide }) {
+function AnimatedTitle({ slide, compactText }: { slide: Slide; compactText: boolean }) {
   const lines = slide.title.split("\n");
   const className = `animated-title title-${slide.id}`;
   const titleShellClass = `title-fx-shell title-mode-${slide.id}`;
+
+  if (compactText) {
+    return (
+      <div className={titleShellClass} data-title={slide.title}>
+        <h2 className={className}>{slide.title}</h2>
+      </div>
+    );
+  }
 
   if (["opening", "law", "provision-consignment", "degaussing", "golden-actions", "outro"].includes(slide.id)) {
     return (

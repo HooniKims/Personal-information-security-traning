@@ -20,6 +20,13 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+button,
+input {
+  font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -973,7 +980,7 @@ h2 {
   }
 
   .slide-body {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     gap: clamp(8px, 2.3vw, 18px);
     height: calc(100% - 42px);
     align-items: center;
@@ -1056,7 +1063,7 @@ h2 {
   }
 
   .foreground-element {
-    width: min(88%, 320px);
+    width: min(80%, 280px);
     max-height: 100%;
   }
 
@@ -1112,9 +1119,30 @@ h2 {
     padding: 10px 12px;
   }
 
+  .animated-title,
+  .animated-title * {
+    display: block !important;
+    white-space: pre-line !important;
+    transform: none !important;
+    writing-mode: horizontal-tb !important;
+    line-height: 1.08 !important;
+    animation-duration: 900ms !important;
+  }
+
+  .title-mode-law .animated-title,
+  .title-mode-golden-actions .animated-title {
+    word-spacing: 0;
+  }
+
+  .title-fx-shell::before,
+  .title-fx-shell::after {
+    display: none;
+  }
+
   .slide-body {
     height: calc(100% - 34px);
-    gap: 8px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    gap: 6px;
   }
 
   .subtitle {
@@ -1124,7 +1152,53 @@ h2 {
   }
 
   h2 {
-    font-size: clamp(14px, 4.15vw, 18px);
+    font-size: clamp(9px, 2.62vw, 12px);
+    line-height: 1.05;
+  }
+
+  .copy {
+    max-width: 100%;
+  }
+
+  .generated-panel::before,
+  .generated-panel span {
+    opacity: 0.55;
+  }
+
+  .slide-provision-consignment .slide-body {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .slide-provision-consignment .generated-panel {
+    display: none;
+  }
+
+  .slide-provision-consignment h2 {
+    white-space: pre-line;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    font-size: clamp(11px, 3.2vw, 14px);
+  }
+
+  .slide-provision-consignment .compare-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .slide-provision-consignment .compare-card {
+    padding: 4px;
+  }
+
+  .slide-provision-consignment .compare-card strong {
+    margin-bottom: 2px;
+    font-size: 7px;
+  }
+
+  .slide-provision-consignment .compare-card p {
+    font-size: 5.8px;
+    line-height: 1.15;
   }
 
   .bullet-list {
