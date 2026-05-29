@@ -4,20 +4,14 @@
 
 웹페이지에서 PPT처럼 장면을 넘기며 발표할 수 있고, Vercel 정적 배포를 전제로 구성했습니다.
 
-## 배포 구조
+## Vercel 배포 설정
 
-이 저장소의 실제 웹앱은 다음 폴더에 있습니다.
-
-```text
-privacy-training-slides/
-```
-
-Vercel에서 프로젝트를 가져올 때는 아래처럼 설정합니다.
+현재 저장소 루트가 바로 Vite 앱입니다. Vercel에서 프로젝트를 가져올 때는 별도 Root Directory를 지정하지 않아도 됩니다.
 
 | 항목 | 값 |
 | --- | --- |
 | Framework Preset | Vite |
-| Root Directory | `privacy-training-slides` |
+| Root Directory | 비워둠 |
 | Install Command | `npm install` |
 | Build Command | `npm run build` |
 | Output Directory | `dist` |
@@ -25,7 +19,6 @@ Vercel에서 프로젝트를 가져올 때는 아래처럼 설정합니다.
 ## 로컬 실행
 
 ```powershell
-cd privacy-training-slides
 npm install
 npm run dev
 ```

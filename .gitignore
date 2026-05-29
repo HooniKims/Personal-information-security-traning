@@ -1,6 +1,6 @@
-privacy-training-slides/node_modules/
-privacy-training-slides/dist/
-video-render/
-*.log
+node_modules
+dist
 .DS_Store
+*.log
+video-render/
 영락의료과학고교표.jpg
