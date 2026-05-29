@@ -327,7 +327,7 @@ function AnimatedTitle({ slide, compactText }: { slide: Slide; compactText: bool
   const lines = slide.title.split("\n");
   const className = `animated-title title-${slide.id}`;
   const titleShellClass = `title-fx-shell title-mode-${slide.id}`;
-  const fixedLineBreakSlides = ["collection", "apm-encrypt", "apm-exception"];
+  const fixedLineBreakSlides = ["collection", "apm-dashboard", "apm-encrypt", "apm-exception"];
 
   if (compactText || fixedLineBreakSlides.includes(slide.id)) {
     return (

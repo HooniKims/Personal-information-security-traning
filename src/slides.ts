@@ -169,7 +169,7 @@ export const slides: Slide[] = [
     id: "apm-dashboard",
     section: "전",
     eyebrow: "APM 실습 1~2",
-    title: "삭제 방법 안내와\nAPM 실행·암호 입력",
+    title: "삭제 방법 안내와\nAPM 실행 암호 입력",
     subtitle: "시작 안내문, 아이콘 실행, 암호 생성 또는 입력을\n한 화면에서 먼저 확인합니다.",
     kind: "apm-dashboard",
     asset: "/assets/apm_steps_1_2.png",
